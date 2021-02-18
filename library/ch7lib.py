@@ -131,6 +131,7 @@ def lu_pp(A_):
     n = A_.shape[0]
     indx = list(range(n))
     for i in range(n-1):
+        print(A)
         am = abs(A[i, i])
         p = i
         for j in range(i+1, n):
