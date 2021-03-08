@@ -131,6 +131,7 @@ def lu_pp(A_):
     n = A_.shape[0]
     indx = list(range(n))
     for i in range(n-1):
+        print(f"Iteration {i}:")
         print(A)
         am = abs(A[i, i])
         p = i
@@ -175,6 +176,35 @@ def lu_solve_pp(A_, b_, i):
             s = s + A[i, j] * x[j]
         x[i] = (y[i] - s)/A[i, i]
     return x
+
+
+def cond_estimation(A, given):
+    alpha = numpy.linalg.norm(A, ord=numpy.inf)
+
+    A, idx = lu_pp(A)
+
+    if given:
+        _y = numpy.array([[.219, .0470, .6789]])
+
+    _y = numpy.random.uniform(0, 1, (A.shape[0], 1))
+    for i in range(5):
+        _y = _y/numpy.linalg.norm(_y, numpy.inf)
+        _y = lu_solve_pp(A, _y, idx)
+    _v = numpy.linalg.norm(_y, numpy.inf)
+    return numpy.dot(_v, alpha)
+
+
+def growth_factor(A):
+    A_ = A.copy()
+    largest = 0
+    n = A_.shape[0]
+    for i in range(n-1):
+        for j in range(i+1, n):
+            m = A_[j, i]/A_[i, i]
+            for k in range(n):
+                A_[j, k] = A_[j, k] - m*A_[i, k]
+        largest = max(numpy.max(numpy.abs(A_)), largest)
+    return largest/numpy.linalg.norm(A_, numpy.inf)
 
 
 # Hn Matrix creator function:
