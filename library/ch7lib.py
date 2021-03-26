@@ -207,6 +207,27 @@ def growth_factor(A):
     return largest/numpy.linalg.norm(A_, numpy.inf)
 
 
+def jacobi_method(x_0, A, b):
+    x = x_0
+    for i in range(0, A.shape[0]):
+        sigma = 0
+        for j in range(0, A.shape[0]):
+            if j != i:
+                sigma = sigma + A[i, j]*x[j]
+        x[i] = (b[i]-sigma)/A[i, i]
+    return x
+
+
+def gauss_seidel(A, b):
+    phi = numpy.zeros_like(b)
+    for i in range(0, A.shape[0]):
+        sigma = 0
+        for j in range(0, A.shape[0]):
+            if j != i:
+                sigma = sigma + A[i, j]*phi[j]
+        phi[i] = (b[i] - sigma)/A[i, i]
+    return phi
+
 # Hn Matrix creator function:
 # Parameters:
 #    n- size of the (square) matrix
